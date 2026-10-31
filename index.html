@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#fff8e8">
+  <meta name="description" content="MoralToons helps children learn values through cartoon stories and picture quizzes.">
+  <title>MoralToons — Little Stories, Big Values!</title>
+  <link rel="stylesheet" href="style.css">
+  <noscript><style>#intro { display: none; }</style></noscript>
+</head>
+<body data-zone="setup" data-screen="setup">
+
+  <!-- ===== OPENING INTRO (covers the page for about 2.5 seconds, then fades away) ===== -->
+  <div id="intro" class="intro" role="region" aria-label="Welcome to MoralToons">
+    <span class="intro-spark" aria-hidden="true">✨</span>
+    <span class="intro-spark" aria-hidden="true">⭐</span>
+    <span class="intro-spark" aria-hidden="true">✨</span>
+    <span class="intro-spark" aria-hidden="true">🌟</span>
+    <span class="intro-spark" aria-hidden="true">⭐</span>
+    <span class="intro-spark" aria-hidden="true">✨</span>
+    <span class="intro-spark" aria-hidden="true">🌟</span>
+    <span class="intro-spark" aria-hidden="true">⭐</span>
+    <div class="intro-center">
+      <img class="intro-logo" src="assets/logo.png" alt="MoralToons logo">
+      <p class="intro-fallback" aria-hidden="true">MoralToons</p>
+      <p class="intro-welcome">Welcome to MoralToons!</p>
+    </div>
+    <button class="intro-skip" id="intro-skip" type="button">Tap to start ▶</button>
+  </div>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <noscript>
+    <p class="noscript-note">MoralToons needs JavaScript. Please turn it on in your browser.</p>
+  </noscript>
+
+  <!-- ===== HEADER (which menu shows depends on body[data-zone]) ===== -->
+  <header class="site-header" id="site-header">
+    <button class="brand" type="button" data-nav="home" aria-label="MoralToons – go to Home">
+      <img class="brand-logo" src="assets/logo.png" alt="">
+      <span class="brand-text">MoralToons</span>
+    </button>
+
+    <nav id="child-nav" aria-label="Main navigation">
+      <button type="button" data-nav="home">Home</button>
+      <button type="button" data-nav="map">Learning Map</button>
+      <button type="button" data-nav="parent" id="parent-zone-button">🔒 Parent Zone</button>
+    </nav>
+
+    <nav id="parent-nav" aria-label="Parent navigation">
+      <button type="button" data-nav="parent">Dashboard</button>
+      <button type="button" data-nav="reports">Reports</button>
+      <button type="button" data-nav="settings">Settings</button>
+      <button type="button" data-action="lock-parent">🔓 Exit Parent Zone</button>
+    </nav>
+  </header>
+
+  <main id="main" tabindex="-1">
+
+    <!-- ===== 1. SETUP STEP 1: CHILD PROFILE ===== -->
+    <section id="screen-setup" class="screen center-screen" hidden aria-labelledby="setup-title">
+      <div class="setup-card">
+        <img class="setup-logo" src="assets/logo.png" alt="MoralToons logo">
+        <p class="eyebrow">WELCOME TO MORALTOONS</p>
+        <h1 id="setup-title">Let's set up your little learner!</h1>
+        <p>Step 1 of 2. Tell us who will be learning. A parent creates a PIN in the next step.</p>
+
+        <form id="setup-form" class="form-stack" novalidate>
+          <label for="child-name">Child's name (optional)</label>
+          <input id="child-name" maxlength="30" autocomplete="off" placeholder="Your little learner">
+          <p class="form-error" id="setup-error" role="alert"></p>
+          <button class="primary-button" type="submit">Next: Parent PIN →</button>
+        </form>
+        <p class="small-note" id="storage-warning" hidden>
+          Your browser is blocking saved data, so progress will be lost when you close this page.
+        </p>
+      </div>
+    </section>
+
+    <!-- ===== 8. SETUP STEP 2: PARENT PIN SETUP ===== -->
+    <section id="screen-pin-setup" class="screen center-screen" hidden aria-labelledby="pin-setup-title">
+      <div class="setup-card">
+        <img class="setup-logo" src="assets/logo.png" alt="MoralToons logo">
+        <p class="eyebrow">PARENT ZONE</p>
+        <h1 id="pin-setup-title">Create a Parent PIN</h1>
+        <p id="pin-setup-intro">Step 2 of 2. Grown-ups use this 4-digit PIN to open the Parent Zone.</p>
+
+        <form id="pin-setup-form" class="form-stack" novalidate>
+          <label for="setup-pin">Create a 4-digit Parent PIN</label>
+          <input id="setup-pin" type="password" inputmode="numeric" maxlength="4"
+                 autocomplete="off" placeholder="••••">
+
+          <label for="setup-pin-confirm">Confirm Parent PIN</label>
+          <input id="setup-pin-confirm" type="password" inputmode="numeric" maxlength="4"
+                 autocomplete="off" placeholder="••••">
+
+          <p class="form-error" id="pin-setup-error" role="alert"></p>
+          <button class="primary-button" type="submit">Create PIN &amp; Begin →</button>
+          <button class="secondary-button" type="button" id="pin-setup-back" data-nav="setup">← Back</button>
+        </form>
+        <p class="small-note">Prototype note: this PIN is stored in the browser and is not strong security.</p>
+      </div>
+    </section>
+
+    <!-- ===== 9. PARENT PIN VERIFICATION ===== -->
+    <section id="screen-pin" class="screen center-screen" hidden aria-labelledby="pin-title">
+      <div class="setup-card pin-card">
+        <img class="setup-logo" src="assets/logo.png" alt="MoralToons logo">
+        <p class="eyebrow">PARENT ZONE</p>
+        <h1 id="pin-title">Grown-ups only, please!</h1>
+        <p>Enter your four-digit Parent PIN.</p>
+
+        <form id="pin-form" class="form-stack" novalidate>
+          <label for="parent-pin-input">Parent PIN</label>
+          <input id="parent-pin-input" type="password" inputmode="numeric" maxlength="4"
+                 autocomplete="off" placeholder="••••">
+          <p class="form-error" id="pin-error" role="alert"></p>
+          <button class="primary-button" id="pin-submit" type="submit">Unlock Parent Zone</button>
+          <button class="secondary-button" type="button" data-action="pin-cancel">Go Back</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- ===== 2. HOME ===== -->
+    <section id="screen-home" class="screen" hidden aria-label="Home">
+      <div class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">LEARN • PLAY • GROW</p>
+          <h1>Little Stories.<br><span>Big Values!</span></h1>
+          <p class="hero-description" id="welcome-message">
+            Come along with your favourite friends and discover the magic of good values!
+          </p>
+
+          <div class="button-row">
+            <button class="primary-button" type="button" data-nav="map">Continue My Adventure →</button>
+            <button class="secondary-button" type="button" data-nav="guides">Choose My Guide</button>
+          </div>
+
+          <div class="hero-note">⭐ Every little act of kindness matters!</div>
+
+          <div class="home-stats">
+            <div><strong id="home-xp">0</strong><span>XP earned</span></div>
+            <div><strong id="home-coins">0</strong><span>Coins</span></div>
+            <div><strong id="home-levels">0/12</strong><span>Values learned</span></div>
+          </div>
+        </div>
+
+        <div class="hero-art">
+          <div class="hero-character-card">
+            <img id="home-guide-image" class="guide-photo" src="assets/arjun.png" alt="Arjun, your guide">
+            <p id="home-guide-caption">Let's learn together!</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 3. GUIDE SELECTION ===== -->
+    <section id="screen-guides" class="screen" hidden aria-labelledby="guides-title">
+      <div class="section-heading">
+        <p class="eyebrow">YOUR STORYTIME FRIENDS</p>
+        <h1 id="guides-title">Choose Your Guide</h1>
+        <p>Your friend will cheer you on during each story.</p>
+      </div>
+
+      <div class="guide-grid">
+        <button class="guide-card" type="button" data-guide="arjun" aria-pressed="false">
+          <img class="guide-photo" src="assets/arjun.png" alt="">
+          <span class="guide-name">Arjun</span>
+          <span class="guide-description">Ready to explore!</span>
+          <span class="choose-label">Choose Arjun</span>
+        </button>
+
+        <button class="guide-card" type="button" data-guide="priya" aria-pressed="false">
+          <img class="guide-photo" src="assets/priya.png" alt="">
+          <span class="guide-name">Priya</span>
+          <span class="guide-description">Ready to learn!</span>
+          <span class="choose-label">Choose Priya</span>
+        </button>
+
+        <button class="guide-card" type="button" data-guide="bholu" aria-pressed="false">
+          <img class="guide-photo" src="assets/bholu.png" alt="">
+          <span class="guide-name">Bholu</span>
+          <span class="guide-description">Ready for fun!</span>
+          <span class="choose-label">Choose Bholu</span>
+        </button>
+      </div>
+
+      <p class="guide-status" id="guide-status" aria-live="polite">Choose a friend to begin your adventure!</p>
+
+      <div class="button-row center">
+        <button class="primary-button" type="button" data-nav="map">Continue to Learning Map →</button>
+        <button class="secondary-button" type="button" data-nav="home">← Back to Home</button>
+      </div>
+    </section>
+
+    <!-- ===== 4. LEVEL MAP ===== -->
+    <section id="screen-map" class="screen" hidden aria-labelledby="map-title">
+      <button class="back-button" type="button" data-nav="home">← Home</button>
+
+      <div class="section-heading">
+        <p class="eyebrow">YOUR LEARNING ADVENTURE</p>
+        <h1 id="map-title">My Moral Adventure</h1>
+        <p>Travel along the path and discover one value at a time.</p>
+      </div>
+
+      <div class="map-summary">
+        <span>⭐ <strong id="map-xp">0</strong> XP</span>
+        <span>🪙 <strong id="map-coins">0</strong> coins</span>
+        <span>🏆 <strong id="map-completed">0</strong>/12 completed</span>
+      </div>
+
+      <div id="level-map" class="level-map" aria-label="12 moral values"></div>
+      <p class="small-note map-note">Locked levels are visible so you can look forward to your next adventure.</p>
+    </section>
+
+    <!-- ===== LEVEL DETAILS ===== -->
+    <section id="screen-level" class="screen" hidden aria-label="Level details">
+      <button class="back-button" type="button" data-nav="map">← Back to Learning Map</button>
+
+      <div class="level-detail-card">
+        <div class="level-art">
+          <img id="level-guide-image" class="guide-photo" src="assets/arjun.png" alt="Your guide">
+        </div>
+
+        <div class="level-copy">
+          <p class="eyebrow" id="level-number">LEVEL 1</p>
+          <h1 id="level-value">Kindness</h1>
+          <h2 id="level-story-title">The Ant and the Dove</h2>
+          <p id="level-description">A tiny act of kindness can make a big difference.</p>
+
+          <div class="level-meta">
+            <span id="level-status">Ready to play</span>
+            <span>⭐ <span id="level-stars">0</span>/3 stars</span>
+          </div>
+
+          <button class="primary-button" id="play-level-button" type="button" data-nav="story">Watch Story →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 5. STORY VIDEO ===== -->
+    <section id="screen-story" class="screen" hidden aria-labelledby="story-heading">
+      <button class="back-button" type="button" data-nav="level">← Back to Level</button>
+
+      <div class="section-heading">
+        <p class="eyebrow" id="story-value-tag">LEVEL 1 • KINDNESS</p>
+        <h1 id="story-heading">The Ant and the Dove</h1>
+        <p id="story-subheading">Watch, learn, and remember!</p>
+      </div>
+
+      <div class="story-card">
+        <div class="video-frame">
+          <video id="story-video" controls playsinline preload="metadata">
+            <source src="assets/ant-and-dove.mp4" type="video/mp4">
+            Your browser does not support video playback.
+          </video>
+        </div>
+
+        <div class="story-details">
+          <span class="story-tag" id="story-tag">🌿 KINDNESS</span>
+          <h2>Watch, learn, and remember!</h2>
+          <p id="story-description">
+            Watch how the dove helps the ant, and how the ant later returns the kindness.
+          </p>
+          <button class="primary-button" id="start-quiz-button" type="button" data-action="start-quiz">
+            I'm Ready for the Quiz! →
+          </button>
+          <p class="small-note" id="video-note" aria-live="polite"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 6. QUIZ ===== -->
+    <section id="screen-quiz" class="screen" hidden aria-labelledby="quiz-title">
+      <button class="back-button" type="button" data-nav="story">← Back to Story</button>
+
+      <div class="section-heading">
+        <p class="eyebrow" id="quiz-value-tag">LEVEL 1 • KINDNESS</p>
+        <h1 id="quiz-title">Picture Quiz</h1>
+        <p>Look carefully and choose the best answer.</p>
+      </div>
+
+      <div class="quiz-card" id="quiz-card">
+        <div class="quiz-topline">
+          <span class="quiz-counter" id="quiz-counter">Question 1 of 3</span>
+          <span class="score-pill">⭐ Points: <strong id="score">0</strong></span>
+        </div>
+
+        <div class="progress-track" role="progressbar" aria-label="Quiz progress"
+             aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="progress-track">
+          <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
+        <div class="quiz-guide">
+          <img id="quiz-guide-image" class="guide-photo" src="assets/arjun.png" alt="">
+          <p id="guide-question">Let's think together!</p>
+        </div>
+
+        <div class="question-scene" id="question-scene">
+          <img id="scene-image" class="scene-img" src="assets/q1-scene.png" alt="">
+        </div>
+
+        <h2 class="question-text" id="question-text">Question</h2>
+        <p class="quiz-instruction">Tap the picture you think is correct!</p>
+
+        <div class="answer-grid" id="answer-grid"></div>
+
+        <div class="feedback" id="feedback" aria-live="polite" hidden>
+          <p id="feedback-message"></p>
+          <div class="reaction" id="reaction">
+            <img id="reaction-image" class="guide-photo" src="assets/arjun-happy.png" alt="">
+          </div>
+        </div>
+
+        <div class="quiz-actions">
+          <button class="primary-button" id="next-button" type="button" data-action="next-question" hidden>
+            Next Question →
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 7. RESULTS AND REWARDS ===== -->
+    <section id="screen-results" class="screen center-screen" hidden aria-labelledby="results-title">
+      <div class="results-card">
+        <img id="results-guide-image" class="guide-photo results-guide" src="assets/arjun-happy.png" alt="">
+        <p class="eyebrow">LEVEL COMPLETE</p>
+        <h1 id="results-title">You did it, little learner! 🎉</h1>
+        <p class="stars-line" id="results-stars" aria-label="Stars earned">⭐⭐⭐</p>
+        <p id="results-message">You learned that kindness can make a big difference.</p>
+
+        <div class="home-stats">
+          <div><strong id="results-round-xp">0</strong><span>XP this round</span></div>
+          <div><strong id="results-total-xp">0</strong><span>Total XP</span></div>
+          <div><strong id="results-coins">0</strong><span>Coins</span></div>
+        </div>
+        <p class="small-note" id="results-note"></p>
+
+        <div class="button-row center">
+          <button class="primary-button" type="button" data-nav="map">Back to Learning Map →</button>
+          <button class="secondary-button" type="button" data-action="replay-quiz">Play Again ↻</button>
+          <button class="secondary-button" type="button" data-nav="home">Home</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 13. TIME FOR A BREAK ===== -->
+    <section id="screen-break" class="screen center-screen" hidden aria-labelledby="break-title">
+      <div class="time-up-card">
+        <div class="time-up-emoji" aria-hidden="true">🌙</div>
+        <p class="eyebrow">WELL DONE TODAY</p>
+        <h1 id="break-title">Time for a little break!</h1>
+        <p>You've done some lovely learning today. Let's rest our eyes and play again another time.</p>
+        <p class="time-up-motto">💛 Little stories. Big values.</p>
+        <div class="button-row center">
+          <button class="primary-button" type="button" id="break-resume-button" data-nav="home" hidden>
+            Back to Home
+          </button>
+          <button class="secondary-button" type="button" data-nav="parent">🔒 Ask a grown-up</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 10. PARENT DASHBOARD ===== -->
+    <section id="screen-parent" class="screen parent-screen" hidden aria-labelledby="parent-title">
+      <p class="zone-badge">🔒 PARENT ZONE</p>
+      <div class="dashboard-heading">
+        <div>
+          <h1 id="parent-title">Parent Dashboard</h1>
+          <p id="parent-subtitle">Review progress and manage your child's experience.</p>
+        </div>
+        <button class="secondary-button" id="parent-lock-button" type="button" data-action="lock-parent">
+          Lock Parent Zone
+        </button>
+      </div>
+
+      <div class="dashboard-stats">
+        <article class="stat-card"><span>Learning time today</span><strong id="dash-today">0 min</strong></article>
+        <article class="stat-card"><span>Time left today</span><strong id="dash-remaining">0 min</strong></article>
+        <article class="stat-card"><span>Total XP</span><strong id="dash-xp">0</strong></article>
+        <article class="stat-card"><span>Values completed</span><strong id="dash-values">0/12</strong></article>
+      </div>
+
+      <div class="dashboard-grid">
+        <section class="settings-card">
+          <h2>Quick actions</h2>
+          <div class="stack-buttons">
+            <button class="primary-button" type="button" data-action="resume-learning">▶ Resume learning</button>
+            <button class="secondary-button" type="button" data-action="add-time">＋ Add 10 minutes for today</button>
+            <button class="secondary-button" type="button" data-nav="reports">📊 Progress reports</button>
+            <button class="secondary-button" type="button" data-nav="settings">⚙️ Settings</button>
+          </div>
+          <p class="inline-message" id="parent-message" aria-live="polite"></p>
+        </section>
+
+        <section class="settings-card">
+          <h2>Child</h2>
+          <p><strong id="dash-child">Little Learner</strong></p>
+          <p class="small-note">Daily limit: <span id="dash-limit">30 min</span></p>
+          <p class="small-note">Guide: <span id="dash-guide">Arjun</span></p>
+        </section>
+      </div>
+
+      <div class="privacy-note">
+        <strong>Prototype security note:</strong>
+        this browser-stored PIN is for demonstration only, not production-grade authentication.
+        A website can only limit itself; it cannot lock the whole phone or tablet.
+      </div>
+    </section>
+
+    <!-- ===== 12. PROGRESS REPORTS ===== -->
+    <section id="screen-reports" class="screen parent-screen" hidden aria-labelledby="reports-title">
+      <p class="zone-badge">🔒 PARENT ZONE</p>
+      <div class="dashboard-heading">
+        <div>
+          <h1 id="reports-title">Progress Reports</h1>
+          <p id="report-period-title">Today's report</p>
+        </div>
+        <button class="secondary-button" type="button" data-nav="parent">← Dashboard</button>
+      </div>
+
+      <div class="report-tabs" role="group" aria-label="Report period">
+        <button type="button" class="report-tab active" data-period="daily" aria-pressed="true">Daily</button>
+        <button type="button" class="report-tab" data-period="weekly" aria-pressed="false">Weekly</button>
+        <button type="button" class="report-tab" data-period="monthly" aria-pressed="false">Monthly</button>
+      </div>
+
+      <div class="dashboard-stats">
+        <article class="stat-card"><span>Learning time</span><strong id="report-time">0 min</strong></article>
+        <article class="stat-card"><span>Values completed</span><strong id="report-values">0</strong></article>
+        <article class="stat-card"><span>Quiz accuracy</span><strong id="report-accuracy">—</strong></article>
+        <article class="stat-card"><span>XP earned</span><strong id="report-xp">0</strong></article>
+      </div>
+
+      <section class="settings-card">
+        <h2>Recent activity</h2>
+        <ul class="report-list" id="report-list"></ul>
+      </section>
+    </section>
+
+    <!-- ===== 11. PARENT SETTINGS ===== -->
+    <section id="screen-settings" class="screen parent-screen" hidden aria-labelledby="settings-title">
+      <p class="zone-badge">🔒 PARENT ZONE</p>
+      <div class="dashboard-heading">
+        <div>
+          <h1 id="settings-title">Settings</h1>
+          <p>Profile, screen time, PIN and data.</p>
+        </div>
+        <button class="secondary-button" type="button" data-nav="parent">← Dashboard</button>
+      </div>
+
+      <div class="dashboard-grid">
+        <section class="settings-card">
+          <h2>Child Profile</h2>
+          <p class="small-note">Profile changes are stored in this browser.</p>
+          <form id="profile-form" class="form-stack" novalidate>
+            <label for="profile-name">Child's name</label>
+            <input id="profile-name" maxlength="30" autocomplete="off" placeholder="Your little learner">
+            <label for="profile-guide">Favourite guide</label>
+            <select id="profile-guide">
+              <option value="arjun">Arjun</option>
+              <option value="priya">Priya</option>
+              <option value="bholu">Bholu</option>
+            </select>
+            <button class="primary-button" type="submit">Save Profile</button>
+            <p class="inline-message" id="profile-message" aria-live="polite"></p>
+          </form>
+        </section>
+
+        <section class="settings-card">
+          <h2>Daily Screen-Time Limit</h2>
+          <p class="small-note">Choose a daily limit between 5 and 240 minutes.</p>
+          <form id="limit-form" class="form-stack" novalidate>
+            <label for="daily-limit">Minutes per day</label>
+            <input id="daily-limit" type="number" inputmode="numeric" min="5" max="240" step="1">
+            <button class="primary-button" type="submit">Save Time Limit</button>
+            <p class="inline-message" id="limit-message" aria-live="polite"></p>
+          </form>
+        </section>
+
+        <section class="settings-card">
+          <h2>Change Parent PIN</h2>
+          <form id="change-pin-form" class="form-stack" novalidate>
+            <label for="current-pin">Current PIN</label>
+            <input id="current-pin" type="password" inputmode="numeric" maxlength="4" autocomplete="off">
+            <label for="new-pin">New 4-digit PIN</label>
+            <input id="new-pin" type="password" inputmode="numeric" maxlength="4" autocomplete="off">
+            <label for="confirm-new-pin">Confirm new PIN</label>
+            <input id="confirm-new-pin" type="password" inputmode="numeric" maxlength="4" autocomplete="off">
+            <button class="primary-button" type="submit">Change PIN</button>
+            <p class="inline-message" id="pin-change-message" aria-live="polite"></p>
+          </form>
+        </section>
+
+        <section class="settings-card">
+          <h2>Account &amp; Data Management</h2>
+          <p>Reset learning progress or delete this local prototype profile.</p>
+          <div class="danger-actions">
+            <button class="secondary-button" id="reset-progress-button" type="button" data-action="reset-progress">↻ Reset Learning Progress</button>
+            <button class="danger-button" id="delete-account-button" type="button" data-action="delete-account">Delete Account &amp; Data</button>
+          </div>
+          <p class="small-note">
+            Reset clears XP, coins, completed levels and the activity list. It keeps the profile, PIN, settings and
+            today's screen-time record. Delete removes everything stored by this prototype in this browser.
+          </p>
+          <p class="inline-message" id="data-message" aria-live="polite"></p>
+        </section>
+
+        <section class="settings-card">
+          <h2>Missing files check</h2>
+          <p class="small-note">If a picture or video file can't be found, it appears here so you can fix the file name.</p>
+          <ul class="report-list" id="missing-assets"></ul>
+        </section>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <p>Made with kindness by MoralToons Learning Solutions</p>
+    <p class="footer-motto">Little stories. Big values. 💛</p>
+  </footer>
+
+  <!-- Confirmation dialog used for reset / delete -->
+  <dialog id="confirm-dialog" aria-labelledby="confirm-title">
+    <h2 id="confirm-title">Are you sure?</h2>
+    <p id="confirm-text"></p>
+    <div id="confirm-type-wrap" hidden>
+      <label for="confirm-type">Type <strong>DELETE</strong> to confirm</label>
+      <input id="confirm-type" autocomplete="off">
+    </div>
+    <div class="dialog-actions">
+      <button type="button" class="secondary-button" id="confirm-cancel">Cancel</button>
+      <button type="button" class="danger-button" id="confirm-ok">Confirm</button>
+    </div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
